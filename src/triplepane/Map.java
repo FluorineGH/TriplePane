@@ -26,8 +26,8 @@ public class Map extends JPanel {
     Image dirt;
     Image town;   
 */
-    Image[] pix = new Image[8];
-    ImageIcon[] iia = new ImageIcon[8];
+    Image[] pix = new Image[9];
+    ImageIcon[] iia = new ImageIcon[9];
     //Timer timer;
     int x = 0;
     int y = 0;
@@ -53,8 +53,9 @@ public class Map extends JPanel {
         iia[5]=new ImageIcon(this.getClass().getResource("grass-dirt-e.png"));
         iia[6]=new ImageIcon(this.getClass().getResource("grass-dirt-s.png"));
         iia[7]=new ImageIcon(this.getClass().getResource("grass-dirt-w.png"));
+        iia[8]=new ImageIcon(this.getClass().getResource("farm.png"));
         
-        for(int i = 0;i<8;i++) {
+        for(int i = 0;i<9;i++) {
             pix[i] = iia[i].getImage();
         }
         
@@ -86,6 +87,7 @@ public class Map extends JPanel {
                     if(grid[ii][i] == 5) g2d.drawImage(pix[5], x, y, this);
                     if(grid[ii][i] == 6) g2d.drawImage(pix[6], x, y, this);
                     if(grid[ii][i] == 7) g2d.drawImage(pix[7], x, y, this);
+                    if(grid[ii][i] == 8) g2d.drawImage(pix[8], x, y, this);
                 }
             }
             

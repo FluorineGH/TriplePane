@@ -52,6 +52,7 @@ public class TriplePane {
             w("Let's find you a home!");
             w("North - South: " + num);
             w("East - West: " + num2);
+            SS.setCoords(num, num2);
             MF.M.setBlock(num,num2,3);
             MF.M.groomMap(num, num2, 3);
             w("The year is: " + MF.YEAR); 
