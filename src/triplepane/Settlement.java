@@ -67,8 +67,12 @@ public class Settlement {
             return;
         }
         if(NS>0) MF.M.setBlock(NS-1,EW,8);
-        
+        else if(NS<9) MF.M.setBlock(NS+1,EW,8);
+        else if(EW>0) MF.M.setBlock(NS,EW-1,8);
+        else if(EW<9) MF.M.setBlock(NS,EW+1,8);
+        MF.writeNarra("A new farm has been completed! This will provide +1 food/year.");
         Farms+=1;
+        Gold-=10;
     }
     
     public void turn(){

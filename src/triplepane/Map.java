@@ -11,6 +11,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import javax.imageio.ImageIO;
 //import java.awt.event.ActionEvent;
 //import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
@@ -20,14 +25,12 @@ import javax.swing.JPanel;
 public class Map extends JPanel {
     public int[][] grid = new int[10][10];
     int BLOCK = 32;
-    
-/*  Image grass;    
-    Image flower;
-    Image dirt;
-    Image town;   
-*/
-    Image[] pix = new Image[9];
-    ImageIcon[] iia = new ImageIcon[9];
+    int iNUM = 10;
+
+    Image[] pix = new Image[iNUM];
+    ImageIcon[] iia = new ImageIcon[iNUM];
+    BufferedImage bi = new BufferedImage(192,128,BufferedImage.TYPE_INT_RGB) ;
+    BufferedImage[] bia = new BufferedImage[24];
     //Timer timer;
     int x = 0;
     int y = 0;
@@ -54,20 +57,24 @@ public class Map extends JPanel {
         iia[6]=new ImageIcon(this.getClass().getResource("grass-dirt-s.png"));
         iia[7]=new ImageIcon(this.getClass().getResource("grass-dirt-w.png"));
         iia[8]=new ImageIcon(this.getClass().getResource("farm.png"));
+        iia[9]=new ImageIcon(this.getClass().getResource("tiles.png"));
         
-        for(int i = 0;i<9;i++) {
+        //load the big tileset
+        Graphics g = bi.createGraphics();
+        iia[9].paintIcon(this, g, 0 ,0);
+        
+        for(int ii=0;ii<4;ii++){
+            for(int i = 0; i <6;i++) {
+                bia[i] = bi.getSubimage(BLOCK*i, 0, BLOCK, BLOCK);
+            }            
+        }   //Graphics g = bia[i].createGraphics();
+            //iia[9].paintIcon(this, g, 0 ,0);
+        
+            
+        for(int i = 0;i<pix.length;i++) {
             pix[i] = iia[i].getImage();
         }
-        
-/*        ImageIcon ii = new ImageIcon(this.getClass().getResource("grass.png"));
-        grass = ii.getImage();
-        ImageIcon di = new ImageIcon(this.getClass().getResource("dirt.png"));
-        dirt = di.getImage();
-        ImageIcon fi = new ImageIcon(this.getClass().getResource("flower.png"));
-        flower = fi.getImage();
-        ImageIcon ti = new ImageIcon(this.getClass().getResource("town.png"));
-        town = ti.getImage();
-*/       
+       
         
     }
     
@@ -79,18 +86,24 @@ public class Map extends JPanel {
                 for(int i=0;i<10;i++){
                     x=i*BLOCK;
                     y=ii*BLOCK;
-                    if(grid[ii][i] == 0) g2d.drawImage(pix[0], x, y, this);
-                    if(grid[ii][i] == 1) g2d.drawImage(pix[1], x, y, this);
-                    if(grid[ii][i] == 2) g2d.drawImage(pix[2], x, y, this);
-                    if(grid[ii][i] == 3) g2d.drawImage(pix[3], x, y, this);
-                    if(grid[ii][i] == 4) g2d.drawImage(pix[4], x, y, this);
-                    if(grid[ii][i] == 5) g2d.drawImage(pix[5], x, y, this);
-                    if(grid[ii][i] == 6) g2d.drawImage(pix[6], x, y, this);
-                    if(grid[ii][i] == 7) g2d.drawImage(pix[7], x, y, this);
-                    if(grid[ii][i] == 8) g2d.drawImage(pix[8], x, y, this);
+    
+                    g2d.drawImage(bia[i], x,y, this);
+                    
+ /*                   if(grid[ii][i] == 0) g2d.drawImage(bia[0], x, y, this);
+                    if(grid[ii][i] == 1) g2d.drawImage(bia[4], x, y, this);
+                    if(grid[ii][i] == 2) g2d.drawImage(bia[5], x, y, this);
+                    if(grid[ii][i] == 3) g2d.drawImage(bia[11], x, y, this);
+                    if(grid[ii][i] == 4) g2d.drawImage(bia[14], x, y, this);
+                    if(grid[ii][i] == 5) g2d.drawImage(bia[21], x, y, this);
+                    if(grid[ii][i] == 6) g2d.drawImage(bia[20], x, y, this);
+                    if(grid[ii][i] == 7) g2d.drawImage(bia[15], x, y, this);
+                    if(grid[ii][i] == 8) g2d.drawImage(bia[16], x, y, this);
+                    */
                 }
             }
-            
+        // Paints bi the big tiles map    
+        //g2d.drawImage(bi, 0,0, this);
+        
         Toolkit.getDefaultToolkit().sync();
         g.dispose();
         
@@ -99,6 +112,10 @@ public class Map extends JPanel {
     public void setBlock(int x, int y, int s) {
         grid[x][y] = s;
         repaint();
+    }
+    
+    public void getBlock(int x,int y) {
+        
     }
     
      public void groomMap(int y, int x, int t){
