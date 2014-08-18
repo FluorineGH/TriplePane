@@ -12,6 +12,8 @@ import java.awt.Insets;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import javax.swing.JLabel;
+import java.awt.event.*;
+import java.util.ArrayList;
 
 /**
  *
@@ -23,13 +25,17 @@ public class MainFrame extends javax.swing.JFrame {
     public static Settlement SS;
     public String input;
     public static int YEAR = 1000;
-            
+    public static Boolean LOST = false;      
+    public ArrayList Armies;
+    
+    
     public MainFrame() {
         setVisible(true);
         initComponents();
         Narra.setEditable(false);
         Settlement SS = new Settlement(this);
-        M = new Map();
+        M = new Map(this);
+        Armies = new ArrayList();
         add(M);
         TP = new TriplePane(this,M,SS);
         TP.intro();
@@ -170,12 +176,23 @@ public class MainFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void EditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditActionPerformed
+        
+        if(LOST == true) {
+            Narra.append("You have died!");
+            ActionListener[] al = Edit.getActionListeners();
+            Edit.removeActionListener(al[0]);
+            return;
+        }
+        
         input = Edit.getText();        
+        if(input.equals("")) Narra.append("Skip turn.");
         Narra.append(input + "\n");
         Edit.setText("");
         TP.doStuff(input);
         
-        SettYEAR.setText(Integer.toString(YEAR));
+        SettYEAR.setText("Year: " + Integer.toString(YEAR));
+        
+        
     }//GEN-LAST:event_EditActionPerformed
 
     /**
@@ -249,6 +266,9 @@ public class MainFrame extends javax.swing.JFrame {
     }
     public void setGold(String s){
         SettGold.setText(s);
+    }
+    public ArrayList getArmies() {
+        return Armies;
     }
     
     

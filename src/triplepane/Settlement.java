@@ -6,14 +6,13 @@
 
 package triplepane;
 
-/**
- *
- * @author jcalvert
- */
+import java.util.ArrayList;
+
+
 public class Settlement {
     int NS;
     int EW;
-               
+    
     MainFrame MF;
     String Name = "";
     int Level;
@@ -66,20 +65,75 @@ public class Settlement {
             MF.writeNarra("You don't have enough gold!");
             return;
         }
-        if(NS>0) MF.M.setBlock(NS-1,EW,8);
-        else if(NS<9) MF.M.setBlock(NS+1,EW,8);
-        else if(EW>0) MF.M.setBlock(NS,EW-1,8);
-        else if(EW<9) MF.M.setBlock(NS,EW+1,8);
+        if(MF.M.grid[NS-1][EW]<2) MF.M.setBlock(NS-1,EW,4);       
+        else if(MF.M.grid[NS+1][EW]<2) MF.M.setBlock(NS+1,EW,4);
+        else if(MF.M.grid[NS][EW-1]<2) MF.M.setBlock(NS,EW-1,4);
+        else if(MF.M.grid[NS][EW+1]<2) MF.M.setBlock(NS,EW+1,4);
+        else if(MF.M.grid[NS+1][EW+1]<2) MF.M.setBlock(NS+1,EW+1,4);
+        else if(MF.M.grid[NS-1][EW-1]<2) MF.M.setBlock(NS-1,EW-1,4);
+        else if(MF.M.grid[NS-1][EW+1]<2) MF.M.setBlock(NS-1,EW+1,4);
+        else if(MF.M.grid[NS+1][EW-1]<2) MF.M.setBlock(NS+1,EW-1,4);
         MF.writeNarra("A new farm has been completed! This will provide +1 food/year.");
         Farms+=1;
         Gold-=10;
     }
     
+    public void buyGarr() {
+        if(Gold<10) {
+            MF.writeNarra("You don't have enough gold!");
+            return;
+        }
+        if(Pop<20) {
+            MF.writeNarra("You don't have the Population to support an army!");
+            return;
+        }
+        if(Pop<10) {
+            MF.writeNarra("You don't have enough Population to recruit soldiers!");
+            return;
+        }
+        MF.writeNarra("A new army has been recruited! They will consume 1 food/year.");
+        Garr+=1;
+        Gold-=10;
+        Pop-=10;
+        MF.Armies.add(new Army(NS,EW));
+        MF.M.repaint();
+    }
+    
+    public void buyWalls() {
+        if(Fort>4) {
+            MF.writeNarra("Your walls are already max level!");
+            return; 
+        }  
+        if(Gold<(Fort*100)+100) {
+            MF.writeNarra("You don't have enough gold!");
+            return; 
+        }
+        MF.writeNarra("You have built walls to protect your city!");     
+        Gold-=(Fort*100)+100;
+        Fort+=1;       
+        MF.M.setBlock(NS,EW,6);       
+        MF.writeNarra("Current Fortification level: " + Fort);
+    }
+    
+    public void sellFood(int i){
+        if(Food<i){
+            MF.writeNarra("You can't sell more food than you have!");
+            return; 
+        }  
+        Food-=i;
+        Gold+=i;
+    }
+    
     public void turn(){
         Pop+=(Pros/10);
         Food-=(Pop/10);
+        Food-=(Garr);
         Food+=Farms;
         Gold+=(Pop/10)*Pros;
+        Pop+=(Food/100);
+        
+        
+        if(Food<1) MF.LOST = true;
     }
     
     public void sUpdate() {
@@ -92,4 +146,8 @@ public class Settlement {
        MF.setFood("Food: " + Integer.toString(Food));
        MF.setGold("Gold: " + Integer.toString(Gold));
     }
+    
+    
+    
+ // END   
 }
