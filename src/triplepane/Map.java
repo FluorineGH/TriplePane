@@ -11,6 +11,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -28,7 +30,8 @@ public class Map extends JPanel {
     int BLOCK = 32;
     int iNUM = 10;
     MainFrame MF;
-    
+    ArrayList aa;
+    ArrayList bb;
     ImageIcon ii = new ImageIcon();
     
     BufferedImage bi = new BufferedImage(800,32,BufferedImage.TYPE_INT_RGB) ;
@@ -44,7 +47,10 @@ public class Map extends JPanel {
         setDoubleBuffered(true);
         loadImages();
         loadMap();
+        aa  = new ArrayList();
+        bb  = new ArrayList();
         
+       
         //timer = new Timer(25,this);
         //timer.start();
         repaint();
@@ -74,23 +80,49 @@ public class Map extends JPanel {
                     x=i*BLOCK;
                     y=ii*BLOCK; 
                     g2d.drawImage(bia[grid[ii][i]], x,y, this);
-                    //Army a = new Army(0,0);
-                    //g2d.drawImage(a.getImage(), a.getX(), a.getY(), this);
                 }
                 
-                ArrayList aa = MF.getArmies();
-                if(aa.size()>0) System.err.println(aa);
-                if(aa.size()==0) System.err.println("aa list = 0");
-                for (int i = 0; i < aa.size(); i++) {
-                    Army a = (Army)aa.get(i);
-                    g2d.drawImage(a.getImage(), a.getX(), a.getY(), this);
+                aa = MF.getArmies();
+                bb = MF.getBarbs();
+                
+                if(aa.size()>0){
+                    for (int i = 0; i < aa.size(); i++) {
+                        Army a = (Army)aa.get(i);
+                        g2d.drawImage(a.getImage(), a.getX()*BLOCK, a.getY()*BLOCK, this);
+                    }
                 }
                 
+                if(bb.size()>0){
+                    for (int i = 0; i < bb.size(); i++) {
+                        Barb b = (Barb)bb.get(i);
+                        g2d.drawImage(b.getImage(), b.getX()*BLOCK, b.getY()*BLOCK, this);
+                    }
+                }
             }
        
         Toolkit.getDefaultToolkit().sync();
         g.dispose();
         
+    }
+    
+    public void checkWar() {
+        if(bb.size()>0){
+            for (int i = 0; i < bb.size(); i++) {
+                Barb b = (Barb)bb.get(i);
+                if(grid[b.getX()][b.getY()]==4) {
+                    System.out.println("Farm contact");
+                    setBlock(b.getX(),b.getY(),3);
+                    MF.SS.Farms-=1;
+                    MF.writeNarra("Farm Destroyed!");
+                }
+                for(int ii = 0;ii<aa.size();ii++) {
+                    Army a = (Army)aa.get(ii);
+                    if(b.getX() == a.getX() && b.getY() == a.getY())
+                        MF.writeNarra("FIGHT FIGHT!");
+                }
+            }
+                      
+        }
     }
     
     public void setBlock(int x, int y, int s) {
@@ -184,5 +216,7 @@ public class Map extends JPanel {
         grid[8][8] = 1;
         */
     }
+    
+    
 // END
 }

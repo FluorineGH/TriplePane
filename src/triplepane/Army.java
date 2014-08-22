@@ -7,7 +7,7 @@
 package triplepane;
 
 import java.awt.Image;
-import java.awt.image.BufferedImage;
+import java.awt.event.KeyEvent;
 import javax.swing.ImageIcon;
 
 /**
@@ -18,9 +18,7 @@ public class Army {
     private int x = 0;
     private int y = 0;
     private Image image;
-    ImageIcon tempload;
-    
-    
+    ImageIcon tempload;    
     
     public Army(int y, int x){
         this.x = x;
@@ -43,5 +41,12 @@ public class Army {
         return y;
     }
     
+    public void move(int m){
+        if(m==1 && y>0) y-=1;
+        if(m==2 && x<9) x+=1;
+        if(m==3 && y<9) y+=1;
+        if(m==4 && x>0) x-=1;
+    }
+   
     
 }

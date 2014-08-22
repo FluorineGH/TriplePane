@@ -27,6 +27,7 @@ public class MainFrame extends javax.swing.JFrame {
     public static int YEAR = 1000;
     public static Boolean LOST = false;      
     public ArrayList Armies;
+    public ArrayList Barbs;
     
     
     public MainFrame() {
@@ -36,6 +37,7 @@ public class MainFrame extends javax.swing.JFrame {
         Settlement SS = new Settlement(this);
         M = new Map(this);
         Armies = new ArrayList();
+        Barbs = new ArrayList();
         add(M);
         TP = new TriplePane(this,M,SS);
         TP.intro();
@@ -47,6 +49,8 @@ public class MainFrame extends javax.swing.JFrame {
         setTitle("Jhethria");
         setResizable(false);
         setVisible(true);
+        Edit.requestFocusInWindow();
+        
     }
     
     
@@ -192,7 +196,12 @@ public class MainFrame extends javax.swing.JFrame {
         
         SettYEAR.setText("Year: " + Integer.toString(YEAR));
         
-        
+        for(int i = 0;i < Barbs.size();i++) {
+            Barb b = (Barb) Barbs.get(i);
+            b.move();
+            M.repaint();
+        }
+        M.checkWar();
     }//GEN-LAST:event_EditActionPerformed
 
     /**
@@ -270,6 +279,11 @@ public class MainFrame extends javax.swing.JFrame {
     public ArrayList getArmies() {
         return Armies;
     }
+    public ArrayList getBarbs() {
+        return Barbs;
+    }
+    
+    
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables

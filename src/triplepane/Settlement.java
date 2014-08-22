@@ -65,14 +65,14 @@ public class Settlement {
             MF.writeNarra("You don't have enough gold!");
             return;
         }
-        if(MF.M.grid[NS-1][EW]<2) MF.M.setBlock(NS-1,EW,4);       
-        else if(MF.M.grid[NS+1][EW]<2) MF.M.setBlock(NS+1,EW,4);
-        else if(MF.M.grid[NS][EW-1]<2) MF.M.setBlock(NS,EW-1,4);
-        else if(MF.M.grid[NS][EW+1]<2) MF.M.setBlock(NS,EW+1,4);
-        else if(MF.M.grid[NS+1][EW+1]<2) MF.M.setBlock(NS+1,EW+1,4);
-        else if(MF.M.grid[NS-1][EW-1]<2) MF.M.setBlock(NS-1,EW-1,4);
-        else if(MF.M.grid[NS-1][EW+1]<2) MF.M.setBlock(NS-1,EW+1,4);
-        else if(MF.M.grid[NS+1][EW-1]<2) MF.M.setBlock(NS+1,EW-1,4);
+        if(MF.M.grid[NS-1][EW]<4) MF.M.setBlock(NS-1,EW,4);       
+        else if(MF.M.grid[NS+1][EW]<4) MF.M.setBlock(NS+1,EW,4);
+        else if(MF.M.grid[NS][EW-1]<4) MF.M.setBlock(NS,EW-1,4);
+        else if(MF.M.grid[NS][EW+1]<4) MF.M.setBlock(NS,EW+1,4);
+        else if(MF.M.grid[NS+1][EW+1]<4) MF.M.setBlock(NS+1,EW+1,4);
+        else if(MF.M.grid[NS-1][EW-1]<4) MF.M.setBlock(NS-1,EW-1,4);
+        else if(MF.M.grid[NS-1][EW+1]<4) MF.M.setBlock(NS-1,EW+1,4);
+        else if(MF.M.grid[NS+1][EW-1]<4) MF.M.setBlock(NS+1,EW-1,4);
         MF.writeNarra("A new farm has been completed! This will provide +1 food/year.");
         Farms+=1;
         Gold-=10;
@@ -132,8 +132,12 @@ public class Settlement {
         Gold+=(Pop/10)*Pros;
         Pop+=(Food/100);
         
+        if(Food<0){
+            Pop+=Food;
+            MF.writeNarra("Your population is starving!");            
+        }
+        if(Pop<1) MF.LOST = true;
         
-        if(Food<1) MF.LOST = true;
     }
     
     public void sUpdate() {

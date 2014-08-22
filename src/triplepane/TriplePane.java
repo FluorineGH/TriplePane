@@ -21,7 +21,7 @@ public class TriplePane {
     static int num;
     static int num2;
     public boolean play = false;
-    //public String s;
+    int spawn = 0;
     
     public TriplePane(MainFrame MF, Map M, Settlement SS) {
         this.SS = SS;
@@ -30,6 +30,7 @@ public class TriplePane {
         Random r = new Random();
         num = r.nextInt(7)+1;
         num2 = r.nextInt(7)+1;
+        
 }
 
     public void intro(){
@@ -59,10 +60,7 @@ public class TriplePane {
             SS.sUpdate();                
         }
         
-        if(SS.Food<1) {
-                w("You have starved to death!");
-                MF.LOST = true;
-        }
+        
         
         //Narra Notes & hints
         if(MF.YEAR<1003) {
@@ -98,6 +96,38 @@ public class TriplePane {
             SS.sellFood(ii);            
         }
         
+        // Movements
+        if(MF.Armies.size()>0) {
+            if(s.equalsIgnoreCase("north") || s.equalsIgnoreCase("n")) {
+                Army a = (Army) MF.Armies.get(0);
+                a.move(1);
+                M.repaint();
+            }
+            if(s.equalsIgnoreCase("east") || s.equalsIgnoreCase("e")) {
+                Army a = (Army) MF.Armies.get(0);
+                a.move(2);
+                M.repaint();
+            }
+            if(s.equalsIgnoreCase("south") || s.equalsIgnoreCase("s")) {
+                Army a = (Army) MF.Armies.get(0);
+                a.move(3);
+                M.repaint();
+            }
+            if(s.equalsIgnoreCase("west") || s.equalsIgnoreCase("w")) {
+                Army a = (Army) MF.Armies.get(0);
+                a.move(4);
+                M.repaint();
+            }
+        }
+        
+        if(YEAR>1020){
+            if(spawn < 80 && MF.Barbs.size()<5) {
+                System.err.println("BARBARIANSSSSSssssssssssssss");
+                MF.Barbs.add(new Barb(SS.EW,SS.NS));
+                
+            }
+        }
+            
         YEAR++;
         SS.turn();
         SS.sUpdate();
